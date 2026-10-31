@@ -10,7 +10,8 @@ Use Open Duet as the source foundation for an independently maintained Scout wor
 
 - Scout fork: https://github.com/Nepritariel08/scout-workspace
 - Upstream: https://github.com/Anil-matcha/open-duet
-- Reviewed revision: `87d71d7055ddd79d5db6f43f4cd56a7c9873c6dd`
+- Initial reviewed and locally tested revision: `87d71d7055ddd79d5db6f43f4cd56a7c9873c6dd`
+- Published fork base: `94c48383fce62f02759b4bb52eb5677ddff978d4`. Its seven subsequent commits change only frontend files; the Scout bootstrap branch is rebased onto this current fork main.
 - Local branch: `scout/bootstrap-20261101`
 - Remotes: `origin` is the Scout fork; `upstream` retains the original source. Upstream pushes are disabled in this checkout.
 - License: Apache-2.0. Preserve the upstream license, attribution, and applicable notices when adapting or distributing the code.
@@ -55,7 +56,9 @@ Self-hosted state does not make OpenRouter inference local: authorized prompt co
 
 Upstream exact-main [CI run 41067147210](https://github.com/Anil-matcha/open-duet/actions/runs/41067147210) passed backend tests on PostgreSQL and SQLite, Linux sandbox enforcement, real-process backend smoke, server smoke, and desktop Node tests. Frontend, mobile and isolated Chromium jobs were skipped by that run's path filters; it does not establish fresh coverage for those jobs.
 
-Local baseline: Windows, Node.js `v24.19.0`, unchanged upstream application code.
+The newer fork base `94c48383fce62f02759b4bb52eb5677ddff978d4` passed upstream [CI run 41230380223](https://github.com/Anil-matcha/open-duet/actions/runs/41230380223): frontend lint/build, server smoke and desktop Node tests. Backend, sandbox, mobile and isolated Chromium jobs were skipped by its path filters. These two runs establish different evidence; neither is represented as a full fresh run of every job.
+
+Local baseline: Windows, Node.js `v24.19.0`, unchanged upstream application code at the initial reviewed revision. The desktop and build-script files are unchanged by the seven newer frontend commits. The Scout bootstrap itself changes documentation and agent instructions only.
 
 | Check | Result |
 | --- | --- |
