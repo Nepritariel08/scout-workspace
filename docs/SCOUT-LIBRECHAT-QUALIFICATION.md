@@ -1,5 +1,11 @@
 # LibreChat candidate qualification
 
+Historical candidate: the owner's later CopilotKit/OpenDuet pivot supersedes
+this foundation and its implementation lane. Preserve these measured receipts
+as research; they do not qualify CopilotKit. See the
+[active integration contract](SCOUT-COPILOTKIT-PIVOT.md). No LibreChat runtime was
+deployed or opened to employees/customers.
+
 Recorded 2026-11-01. This is a bounded synthetic qualification for the
 [enterprise architecture](SCOUT-ENTERPRISE-ARCHITECTURE.md), not a production
 release, penetration test or approval to admit employees/customers.
@@ -7,7 +13,7 @@ release, penetration test or approval to admit employees/customers.
 The owner source fork is now [Nepritariel08/scout-platform](https://github.com/Nepritariel08/scout-platform),
 verified as a public fork of LibreChat-AI/LibreChat with its MIT license retained.
 The qualified commit exists in that fork. Its moving default branch is not the
-qualified release pin; future pilot work starts from the recorded pin.
+qualified release pin. No future LibreChat pilot is selected by this record.
 
 ## Candidate and reproducibility
 

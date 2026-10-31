@@ -3,7 +3,9 @@
 Date: 2026-11-01, Asia/Shanghai. Status: architecture and implementation contract,
 not a claim of deployed enterprise controls. Primary engineering tracker:
 [SSC AI Enablement #4](https://github.com/Nepritariel08/ssc-ai-enablement/issues/4#issuecomment-6547459663),
-under architecture #8. Source work remains in the existing Scout fork/PR #1.
+under architecture #8. The active interface source is the owned
+[CopilotKit OpenDuet fork](https://github.com/Nepritariel08/scout-copilot).
+This repository/PR #1 retains the pilot and architecture reference.
 
 ## Outcome and decisions
 
@@ -20,12 +22,14 @@ safeguards, caching, routing and monitoring. Its caption and initial visual
 explanation were inspected in the authenticated owner browser; no complete
 audio transcript was obtained. It guides the architecture, not authority.
 
-1. **One user-facing Scout workspace.** Qualify LibreChat as the employee and
-   customer conversation foundation. Its multi-user/auth/access capabilities
-   and MIT application license fit this expanded requirement better than the
-   current single-owner Open Duet install. This is a candidate recommendation,
-   subject to the pinned-source and runtime qualification below.
-2. **Keep the useful work already done.** Retain Open Duet's proven submission,
+1. **One user-facing Scout workspace.** The owner's latest direction selects
+   **CopilotKit/OpenDuet**, built on OpenBot, as Scout's interface foundation.
+   Use its tenant-package extension and AG-UI integration boundaries. Its MIT
+   source does not establish enterprise isolation or ownership of the required
+   Intelligence service. The prior LibreChat recommendation is superseded;
+   its test evidence does not transfer to CopilotKit. See the
+   [pivot contract](SCOUT-COPILOTKIT-PIVOT.md).
+2. **Keep the useful work already done.** Retain the Anil-matcha pilot's submission,
    review and crash-recovery contracts, the existing Odoo queue/DSH worker and
    Scout's native MatePad approval/execution boundary. Port capabilities behind
    stable interfaces; do not combine entire dependency trees or run three
@@ -49,7 +53,8 @@ flowchart TD
     E[Employees: PC or MatePad] --> EDGE[HTTPS Scout portal]
     C[Authenticated customers] --> EDGE
     EDGE --> ID[Identity and tenant resolution]
-    ID --> CHAT[One Scout conversation workspace]
+    ID --> CHAT[Scout: CopilotKit OpenDuet and OpenBot]
+    CHAT --> I[Approved Intelligence persistence]
     CHAT --> G[Scout policy and integration gateway]
     G --> P[Resource authorization]
     P --> K[Permitted knowledge and live Odoo reads]
@@ -79,7 +84,8 @@ workflow is intentionally migrated with a stable originating-message key.
 | Identity, membership, account revocation | Selected identity provider and verified Scout membership mapping |
 | Business records and their source permissions | Owning Odoo database or authorized upstream service |
 | Work state, worker lease, result, human acceptance | Existing Odoo Community work queue |
-| Conversations, attachments and private user preferences | Tenant-scoped central chat store |
+| Conversation threads | CopilotKit Intelligence in an approved managed or licensed self-hosted deployment; local replacement requires a separately tested adapter |
+| Attachments, policies, approvals and local application state | Scoped OpenBot PostgreSQL/pgvector and protected object/file storage; qualify exact ownership and backup coverage |
 | Document access relationships and Scout resource policy | Scout authorization store, intersected with source rights |
 | Physical device execution and local readback | Paired native Scout agent; report provenance retained |
 | Engineering source, policies, skill versions, tests | GitHub review and versioned release manifests |
@@ -119,12 +125,16 @@ records/documents/devices those capabilities apply to.
 
 Provision each tenant's versioned capability policy before admitting its users;
 reject admission if the tenant lacks an approved policy. Qualify policy updates
-and revocation with cache invalidation and API readback. The initial LibreChat
+and revocation with cache invalidation and API readback. The historical LibreChat
 runtime check found that disabling a capability in YAML updated platform roles
 while a new tenant could receive permissive default roles. Explicit tenant-role
 provisioning made the tested API denials pass; see the
 [qualification evidence](SCOUT-LIBRECHAT-QUALIFICATION.md). A hidden menu does
-not establish server-side denial.
+not establish server-side denial. That finding motivates this platform-neutral
+requirement; it is not a claim about CopilotKit. CopilotKit channel groups,
+single-user mode, skills and model prompts must be tested against the same
+server-side access matrix. Do not expose the upstream single-user administrator
+default or copied personal-assistant package to employees/customers.
 
 Proposed initial policy:
 
@@ -248,14 +258,27 @@ private database/listener ports, secret files outside source, resource and uploa
 limits, retained recovery points and reversible proxy changes. Do not run
 upstream sample passwords, public database ports or moving `latest` images.
 
-LibreChat's application store uses MongoDB: retaining Odoo/PostgreSQL does not
-remove that dependency. Keep separate credentials/databases for Scout data,
-authorization and any pgvector index. Do not attach application code to Odoo's
-database as a superuser. PostgreSQL/pgvector is a retrieval option after actual
-host/extension qualification; live authorized source search can precede it.
+CopilotKit OpenDuet's embedded OpenBot uses PostgreSQL/pgvector for application
+state and requires Intelligence for durable threads. Keep separate credentials
+and databases for Scout, authorization and retrieval; never use Odoo's superuser
+connection. Qualify PostgreSQL extensions, object/attachment storage and restore.
+
+Intelligence is a separate deployment and licensing decision. Its current local
+evaluation requires macOS/Docker Desktop and at least12 GiB RAM; that route does
+not fit the existing8GB Linux Community host. Production self-hosting has a
+separate entitlement. Managed Intelligence would send approved conversation
+data outside Linode. Resolve the approved route and data policy before real
+employee/customer conversations; a memory-table fallback does not replace its
+required thread service. Do not bypass entitlement checks or silently choose
+managed persistence. See the [source/dependency record](SCOUT-COPILOTKIT-PIVOT.md).
+
+Treat persistence, automatic learning, voice/transcription and telemetry as
+data destinations alongside model inference. Apply the same classification,
+tenant scope, retention/deletion, consent and egress policy to each. An approved
+OpenRouter route does not approve an Intelligence project or its learning data.
 
 Reuse the existing identity provider. Start with one web/API process and no
-unneeded attached-code worker, extra scheduler, Meilisearch, heavyweight reranker
+unneeded attached-code worker, duplicate routine scheduler, heavyweight reranker
 or full telemetry stack. Add Redis, indexing/search workers or replicas only
 when required by the chosen features and tested recovery/concurrency behavior.
 Any omitted optional feature is recorded in the capability matrix, not silently
@@ -269,7 +292,8 @@ recovery point/time targets and budget numerically with the owner before custome
 production; none has been agreed yet. A later approved scale-out can retain
 Odoo on this Linode while separating public ingress, retrieval or inference.
 
-Back up chat MongoDB, Odoo DB/filestore, attachments, authorization policy/data,
+Back up Scout PostgreSQL/pgvector, approved Intelligence threads, Odoo DB/filestore,
+attachments, authorization policy/data,
 source/configuration manifests and protected encryption/signing material using
 appropriate consistent snapshots. Keep an encrypted off-host recovery copy;
 restore in isolation and verify identities, source/attachment references and
@@ -336,9 +360,10 @@ queue owner's test/monitor in Issue #4; do not create a second countdown.
   owner-approved PC-off acceptance pass before those capabilities are claimed.
 
 These are release criteria. Selected synthetic chat/file/tenant/capability and
-recovery checks are recorded in the [qualification report](SCOUT-LIBRECHAT-QUALIFICATION.md);
-the remaining identity, source, action, device and operating criteria are not
-satisfied by those results. The prior synthetic owner pilot remains useful but
+recovery checks for the superseded candidate are recorded in the
+[historical qualification report](SCOUT-LIBRECHAT-QUALIFICATION.md); they do not
+qualify CopilotKit. Its identity, source, action, device and operating criteria
+require fresh evidence. The prior synthetic owner pilot remains useful but
 does not satisfy employee/customer tenancy acceptance.
 
 ## Sources and open decisions

@@ -7,33 +7,35 @@ customer account or public endpoint was deployed during this review.
 
 ## Recommendation
 
-Qualify **LibreChat** as Scout's employee/customer conversation foundation.
-Retain the existing DSH/Odoo queue and port the useful Open Duet review/recovery
-contract; retain native Scout device actions behind their separate authorization
-boundary. Use one product and pinned upstream components, with small Scout
-adapters rather than maintaining several full chat forks. Existing Open Duet
-owner-pilot evidence remains valid for its tested scope.
+The owner's later explicit pivot selects **CopilotKit/OpenDuet**, built on
+OpenBot, as the interface foundation. The earlier LibreChat recommendation is
+superseded. Retain the existing DSH/Odoo queue and port the Anil-matcha pilot's
+review/recovery contract; keep native Scout actions behind device authorization.
+Use one product with small adapters and a copied tenant package. See the
+[CopilotKit pivot, dependency and qualification contract](SCOUT-COPILOTKIT-PIVOT.md).
 
-Source fork [Nepritariel08/scout-platform](https://github.com/Nepritariel08/scout-platform)
-now exists with its upstream MIT attribution retained. The selected release pin
-is available there; its default branch is not an approved production build.
-The existing Scout/Open Duet fork remains the contract/reference pilot during
-integration; no second public chat app has been activated.
+Active source fork: [Nepritariel08/scout-copilot](https://github.com/Nepritariel08/scout-copilot),
+parent CopilotKit/OpenDuet, MIT, upstream pin
+`f52288fff5ccdbd3de428d573d9f026fce5ff480`. The LibreChat fork
+[scout-platform](https://github.com/Nepritariel08/scout-platform) and its isolated
+qualification receipts are retained as research. No LibreChat deployment or
+shared-user activation occurred. The Anil-matcha fork remains the pilot reference.
 
 The initial Open Duet selection addressed a personal workspace/queue pilot.
 Employee/customer access materially expands that requirement. Building a full
-multi-user/tenant system inside its single-owner server is a larger maintenance
-commitment than qualifying a foundation that already contains those controls.
+multi-user/tenant system requires service-enforced controls. CopilotKit's
+interface/AG-UI choice does not waive any employee/customer access criteria.
 
 ## Compared repositories
 
 | Candidate | Relevant strengths | Material qualification or licensing boundary | Decision |
 | --- | --- | --- | --- |
-| [LibreChat](https://github.com/LibreChat-AI/LibreChat) | Multi-user authentication, OIDC, resource/feature permissions, MCP, compatible model endpoints, persistent/multi-device conversations. | Application code MIT with notices retained; dependency terms still apply. Current docs are latest/dev. Latest inspected release entries are marked prerelease; source presence is not live isolation proof. Adds MongoDB; native DSH/Scout integration still required. | Leading candidate for employee/customer qualification. |
+| [CopilotKit OpenDuet](https://github.com/CopilotKit/OpenDuet) | OpenBot platform, AG-UI, mobile/web, tasks/pages, approvals, audit and tenant-package extension. | MIT source; required Intelligence service is separately deployed/entitled. Early active development; no OpenDuet-specific published deployment image. Upstream personal/single-user defaults need replacement before team/customer access. | **Selected by owner pivot; qualify source, persistence and isolation before private deployment.** |
+| [LibreChat](https://github.com/LibreChat-AI/LibreChat) | Multi-user authentication, OIDC, resource/feature permissions, MCP, compatible endpoints. | MIT with notices; separate MongoDB footprint. Selected synthetic qualification completed, not production identity acceptance. | Earlier recommendation superseded by owner; preserve research only. |
 | [Open WebUI](https://github.com/open-webui/open-webui) | Self-hosted local/API model chat, knowledge, roles/groups/resource permissions. | Current license restricts altering branding beyond50 end users in a rolling30-day window unless an exception/permission/license applies. Its additive UI/resource grants do not replace external record authorization. | Good alternative, less suitable for an independently branded product growing across customers without resolving those terms. |
 | [Dify](https://github.com/langgenius/dify) | Workflow/application builder and knowledge integration. | Modified Apache terms require authorization for multi-tenant environments and restrict frontend branding changes. Do not assume a rebranded customer platform is covered. | Reference/optional licensed workflow component; not the default Scout foundation. |
 | [Onyx](https://github.com/onyx-dot-app/onyx) | Enterprise search/chat and connector-oriented knowledge retrieval. | MIT portions plus separately licensed `ee` directories; exact required permission-sync/SSO features and operating footprint need edition/source qualification. | Retrieval-focused alternative if its connectors justify it; do not add a second chat portal in the initial stack. |
-| [Open Duet](https://github.com/Anil-matcha/open-duet) / current Scout fork | Proven owner pilot with durable task intent, originating-conversation review, explicit acceptance and crash recovery. | Self-hosted authentication explicitly has one owner; paired devices are not separate employee accounts. Current Scout engine has one requester binding. | Preserve tested capabilities; do not expose the current binding to staff/customers. |
+| [Anil-matcha Open Duet](https://github.com/Anil-matcha/open-duet) / old Scout pilot | Proven durable task intent, conversation review, acceptance and crash recovery. | Different project from CopilotKit/OpenDuet. One owner/requester binding. | Preserve contracts and receipts for port; superseded interface. |
 
 License observations describe the retrieved files, not a substitute for a
 dependency/edition/branding review before distribution or customer service.
@@ -89,7 +91,7 @@ dependency/edition/branding review before distribution or customer service.
 | [Langfuse](https://github.com/langfuse/langfuse) | Tracing/evaluation integration reference. | Redacted structured audit first; edition, storage and resource qualification before adding another telemetry stack. |
 | Existing PostgreSQL / possible pgvector | Work state and a separate retrieval store. | Odoo remains authoritative. A vector extension, new database/account or index is separately qualified; never reuse Odoo superuser credentials. |
 
-The upstream LibreChat Compose example includes MongoDB, a RAG API, pgvector,
+The historical LibreChat Compose example includes MongoDB, a RAG API, pgvector,
 Meilisearch and an admin component, and uses moving image tags/default example
 settings. Do not run that sample unchanged beside Community. Use a minimal
 version-pinned deployment with private ports, explicit secrets, disabled unused

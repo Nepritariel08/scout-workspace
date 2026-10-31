@@ -8,10 +8,10 @@ under architecture #8. The physical PC-off test remains deferred by the owner.
 The later employee/customer requirement is governed by the
 [enterprise architecture](SCOUT-ENTERPRISE-ARCHITECTURE.md) and
 [foundation review](SCOUT-REPOSITORY-REVIEW.md). The Open Duet server sequence
-below describes the bounded single-owner option; it is not the selected way
-to implement employee/customer identity. LibreChat is the leading candidate
-for that shared workspace, subject to qualification. Preserve the proven queue
-and native Scout capabilities whichever frontend is adopted.
+below describes the historical Anil-matcha single-owner option. The owner's
+latest direction selects **CopilotKit/OpenDuet**; LibreChat is superseded.
+Use the [pivot contract](SCOUT-COPILOTKIT-PIVOT.md) for the active source and
+dependency boundaries. Preserve the proven queue and native Scout capabilities.
 
 ## Current placement
 
@@ -28,18 +28,18 @@ pilot. It is not the only acceptance needed for server deployment or staff use.
 
 ## Proposed product boundary
 
-Scout App is the user-facing product and navigation. Adopt Open Duet's
-conversation/history/review implementation as its workspace, linked from the
-existing Scout portal first. Keep a separate deployment origin initially;
-embedding, visual integration and sign-in integration can follow without
-copying the work queue. Preserve upstream Apache-2.0 attribution.
+Scout App is the user-facing product and navigation. Adopt CopilotKit OpenDuet's
+tenant-package interface, port the old pilot's review/recovery contract, and
+reuse the existing queue. Keep a protected deployment origin initially, with
+verified sign-in and persistence before shared access. Preserve MIT attribution
+in the CopilotKit fork and Apache-2.0 attribution for any old-pilot code reused.
 
 ```mermaid
 flowchart TD
     PC[PC browser] --> S[Scout App]
     MP[MatePad browser] --> S
     subgraph Linode[Always-on Linode services]
-        S --> W[Conversation workspace from Open Duet]
+        S --> W[Scout from CopilotKit OpenDuet]
         W --> A[Scout requester adapter]
         A --> Q[Existing Odoo work queue]
         Q --> D[Existing DSH worker]

@@ -8,15 +8,25 @@ Source bootstrap: [Scout Workspace PR #1](https://github.com/Nepritariel08/scout
 
 ## Decision and scope
 
-Scope expansion, 2026-11-01: the owner now requests an owned AI platform for
-employees and customers with permission-aware context, security layers and
-access rights. The [enterprise architecture](docs/SCOUT-ENTERPRISE-ARCHITECTURE.md)
-and [foundation review](docs/SCOUT-REPOSITORY-REVIEW.md) qualify LibreChat as a
-stronger shared-workspace candidate. The Open Duet decision below remains the
-accepted owner-pilot foundation; it is not a multi-user production approval.
-Preserve its tested task/review/recovery behavior and upstream attribution.
+Owner-directed pivot, 2026-11-01: **CopilotKit/OpenDuet** is the selected
+interface foundation for the owned employee/customer Scout product. The owned
+fork is [scout-copilot](https://github.com/Nepritariel08/scout-copilot), upstream
+pin `f52288fff5ccdbd3de428d573d9f026fce5ff480`, MIT. This is a different project
+from this repository's Anil-matcha/open-duet base. The earlier LibreChat
+recommendation and implementation lane are superseded. Its qualification
+receipts remain historical evidence, not proof about CopilotKit.
 
-Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The source includes a requester-only Scout execution adapter and conversation review controls. The private loopback workspace has passed live queue round-trip, human acceptance, bounded OpenRouter inference and client-crash recovery checks. Actual PC-off completion remains unverified.
+See the [pivot and integration contract](docs/SCOUT-COPILOTKIT-PIVOT.md) and
+[enterprise architecture](docs/SCOUT-ENTERPRISE-ARCHITECTURE.md). Preserve this
+pilot's tested task/review/recovery contract and native Scout capabilities;
+port them behind the new interface using the existing Odoo/DSH queue. No shared
+access, device installation or CopilotKit deployment is established by a fork.
+
+The following records the historical single-owner Anil-matcha/Open Duet pilot.
+It is the reference for porting, not the selected future application. The owner
+authorized this fork and source bootstrap on 2026-11-01. Its requester-only
+adapter passed live queue round-trip, human acceptance, bounded OpenRouter
+inference and client-crash recovery checks. PC-off completion remains deferred.
 
 - Scout fork: https://github.com/Nepritariel08/scout-workspace
 - Upstream: https://github.com/Anil-matcha/open-duet
@@ -27,11 +37,11 @@ Use Open Duet as the source foundation for an independently maintained Scout wor
 - License: Apache-2.0. Preserve the upstream license, attribution, and applicable notices when adapting or distributing the code.
 - Owner: Codex, chat `01a19336-83fb-7ab0-9829-6fc1c290c93f`. This checkout is independent of the active DSH/Community queue source lane and the Community migration host owner.
 
-## Candidates compared
+## Candidates compared for the historical owner pilot
 
 | Candidate | Source evidence | Fit for Scout |
 | --- | --- | --- |
-| [Open Duet](https://github.com/Anil-matcha/open-duet/tree/87d71d7055ddd79d5db6f43f4cd56a7c9873c6dd) | Durable conversation events, approvals, encrypted engine configuration, process recovery, SQLite/PostgreSQL, engine adapters, and current passing backend/sandbox/process CI | Preferred workspace foundation. API engines currently provide chat only; a DSH/queue adapter is required for Scout execution. |
+| [Anil-matcha Open Duet](https://github.com/Anil-matcha/open-duet/tree/87d71d7055ddd79d5db6f43f4cd56a7c9873c6dd) | Durable conversation events, approvals, encrypted engine configuration, process recovery, SQLite/PostgreSQL and engine adapters. | Selected for the historical owner pilot; superseded by CopilotKit/OpenDuet. Preserve its queue/review contracts. |
 | [CopilotKit/OpenDots](https://github.com/CopilotKit/OpenDots/tree/8091324942b86789ed0da7facbee855145d933b0) | Exact-main CI passed; OpenAI-compatible Chat Completions adapter with tools, MCP approvals, pages, and OpenBot computers | Good UI/tool template, but conversations require CopilotKit Intelligence. Supported production self-hosting requires its self-hosted plan; local evaluation is licensed, time limited, and supported on macOS. Replacing that dependency is additional engineering. |
 | [Shashankss1205/OpenDots](https://github.com/Shashankss1205/OpenDots/tree/de37e7445418ace9862daf33b7ac7014064790de) | Exact-main CI passed; Linux runtime, persistent goals/events, approval policy, compatible API and Ollama providers | Useful runtime reference, but a smaller prototype and another executor/scheduler alongside the existing DSH pilot. Its compatible API requires the selected model to support the configured structured-output dialect. |
 
