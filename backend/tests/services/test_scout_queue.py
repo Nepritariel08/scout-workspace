@@ -211,19 +211,18 @@ async def test_history_and_current_context_are_preserved_once(queue_setup):
 
 
 @pytest.mark.parametrize("user_stop", [False, True])
-async def test_stop_cancels_but_backend_detachment_preserves_remote_work(queue_setup, user_stop):
-    fixture, binding, connector = queue_setup
+async def test_stop_cancels_but_backend_detachment_preserves_remote_work(scout_rt, sessions, queue_setup, user_stop):
+    fixture, _, _ = queue_setup
     fixture.auto_finish = False
-    async def history(): return []
-    ctx = TurnContext(1, 1, "Draft", None, None, None, None, False, history)
-    ctx.owner_id = binding.owner_id
-    class Sink:
-        async def emit(self, type, data): return True
-    task = asyncio.create_task(ScoutQueueAdapter(binding, connector).run_turn(ctx, Sink(), None))
+    thread = await scout_rt.create_thread(provider="scout_queue")
+    await scout_rt.send_turn(thread.id, "Draft")
     await asyncio.wait_for(fixture.submitted.wait(), 3)
-    ctx.stop_requested = user_stop
-    ctx.abort()
-    outcome = await asyncio.wait_for(task, 3)
+    if user_stop:
+        await scout_rt.stop_turn(thread.id)
+    else:
+        await scout_rt.shutdown()
+    await finished(sessions, thread.id)
     assert fixture.cancel_calls == int(user_stop)
     assert fixture.items[1]["state"] == ("cancelled" if user_stop else "queued")
-    assert outcome.status == ("cancelled" if user_stop else "failed")
+    events = await events_of(sessions, thread.id)
+    assert ("turn.cancelled" if user_stop else "turn.interrupted") in [event.type for event in events]
