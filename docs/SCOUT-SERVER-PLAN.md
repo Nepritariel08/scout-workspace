@@ -5,6 +5,14 @@ Status: proposed deployment and acceptance plan; no workspace deployment or
 shared access activation is claimed. Engineering record: [Issue #4](https://github.com/Nepritariel08/ssc-ai-enablement/issues/4#issuecomment-6547459663),
 under architecture #8. The physical PC-off test remains deferred by the owner.
 
+The later employee/customer requirement is governed by the
+[enterprise architecture](SCOUT-ENTERPRISE-ARCHITECTURE.md) and
+[foundation review](SCOUT-REPOSITORY-REVIEW.md). The Open Duet server sequence
+below describes the bounded single-owner option; it is not the selected way
+to implement employee/customer identity. LibreChat is the leading candidate
+for that shared workspace, subject to qualification. Preserve the proven queue
+and native Scout capabilities whichever frontend is adopted.
+
 ## Current placement
 
 | Component | Verified placement and limits |

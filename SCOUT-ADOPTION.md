@@ -8,6 +8,14 @@ Source bootstrap: [Scout Workspace PR #1](https://github.com/Nepritariel08/scout
 
 ## Decision and scope
 
+Scope expansion, 2026-11-01: the owner now requests an owned AI platform for
+employees and customers with permission-aware context, security layers and
+access rights. The [enterprise architecture](docs/SCOUT-ENTERPRISE-ARCHITECTURE.md)
+and [foundation review](docs/SCOUT-REPOSITORY-REVIEW.md) qualify LibreChat as a
+stronger shared-workspace candidate. The Open Duet decision below remains the
+accepted owner-pilot foundation; it is not a multi-user production approval.
+Preserve its tested task/review/recovery behavior and upstream attribution.
+
 Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The source includes a requester-only Scout execution adapter and conversation review controls. The private loopback workspace has passed live queue round-trip, human acceptance, bounded OpenRouter inference and client-crash recovery checks. Actual PC-off completion remains unverified.
 
 - Scout fork: https://github.com/Nepritariel08/scout-workspace
