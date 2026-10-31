@@ -6,12 +6,13 @@ Engineering tracker: [SSC AI Enablement #4](https://github.com/Nepritariel08/ssc
 
 ## Decision and scope
 
-Use Open Duet as the preferred source foundation for an independently maintained Scout workspace. This is a source selection and local fork preparation; the Scout integration has not been implemented or activated.
+Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The Scout execution integration has not been implemented or activated.
 
+- Scout fork: https://github.com/Nepritariel08/scout-workspace
 - Upstream: https://github.com/Anil-matcha/open-duet
 - Reviewed revision: `87d71d7055ddd79d5db6f43f4cd56a7c9873c6dd`
 - Local branch: `scout/bootstrap-20261101`
-- Remote: `upstream`; no SSC publication remote has been configured.
+- Remotes: `origin` is the Scout fork; `upstream` retains the original source. Upstream pushes are disabled in this checkout.
 - License: Apache-2.0. Preserve the upstream license, attribution, and applicable notices when adapting or distributing the code.
 - Owner: Codex, current OpenDots assessment/adoption session. This checkout is independent of the active DSH/Community queue source lane and the Community migration host owner.
 
@@ -74,7 +75,11 @@ The four failures remain visible. No test was weakened or marked passing. Deskto
 
 ## Next implementation slice
 
-1. Implement the Scout execution adapter against the existing queue contract in coordination with its owner, with task IDs, cancellation, terminal results and receipts; preserve the initial draft-only scope.
+The first useful outcome is one draft task submitted from the Scout workspace, executed once through the Odoo/DSH queue, and returned to the same conversation with its Odoo work-item ID and review state. The requester can then accept the draft. External business actions are outside this first slice.
+
+The queue source contract is in [SSC AI Enablement PR #88](https://github.com/Nepritariel08/ssc-ai-enablement/pull/88), reviewed for planning at `dba1dab16dcaa32c03984229c628cd866e02e712`. Its exact-head connector and clean Community CI passed. It remains a draft source PR; this is not a deployment claim. Reconcile its current reviewed head with its owner before implementing the adapter.
+
+1. Implement the Scout execution adapter against that queue contract in coordination with its owner, with task IDs, cancellation, terminal results and receipts; preserve the initial draft-only scope and keep the work behind an explicit engine capability.
 2. Qualify the chosen OpenRouter/local route with a bounded model request, then streaming, cancellation, cost reporting and any separately authorized tool/approval flow.
 3. Verify service restart, expired claims, uncertain completion without duplicate execution, requester isolation and a task completed while the Windows client is off before replacing an existing workflow.
 
