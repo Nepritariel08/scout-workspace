@@ -1,0 +1,60 @@
+name: scout-qual-01a19336
+services:
+  mongo:
+    image: mongo:8.0.20@sha256:098862b1339f031900ca66cf8fef799e616d6324fa41b9a263f2ec899552c1ef
+    command: ["mongod", "--bind_ip_all", "--quiet"]
+    volumes:
+      - mongo-data:/data/db
+    networks: [qualification]
+    mem_limit: 768m
+    cpus: 1.0
+    restart: "no"
+  app:
+    image: ghcr.io/librechat-ai/librechat:v0.8.9-rc1@sha256:26e3290c82002fd5e4d5e0fd8f7de4d2f2a430f12049d82190d1e4a80f2a3cb2
+    depends_on: [mongo]
+    env_file: .env.qa
+    environment:
+      HOST: 0.0.0.0
+      PORT: "3080"
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/ScoutQualification
+      DOMAIN_CLIENT: http://127.0.0.1:18481
+      DOMAIN_SERVER: http://127.0.0.1:18481
+      CONFIG_PATH: /app/scout-qualification.yaml
+      TRUST_TENANT_HEADER: "true"
+      TENANT_ISOLATION_STRICT: "true"
+      ALLOW_REGISTRATION: "false"
+      ALLOW_SOCIAL_REGISTRATION: "false"
+      ALLOW_SOCIAL_LOGIN: "false"
+      ALLOW_PASSWORD_RESET: "false"
+      ALLOW_EMAIL_LOGIN: "true"
+      SEARCH: "false"
+      MEILI_NO_SYNC: "true"
+      MEILI_NO_ANALYTICS: "true"
+      SCARF_ANALYTICS: "false"
+      ENDPOINTS: openAI
+      BAN_VIOLATIONS: "false"
+      LOGIN_MAX: "1000"
+      DEBUG_LOGGING: "false"
+      DEBUG_CONSOLE: "false"
+      LIBRECHAT_ENABLE_RUM: "false"
+    volumes:
+      - ./scout-qualification.yaml:/app/scout-qualification.yaml:ro
+      - ./seed.cjs:/app/scout-qualification-seed.cjs:ro
+      - ./probe.cjs:/app/scout-qualification-probe.cjs:ro
+      - ./policy.cjs:/app/scout-qualification-policy.cjs:ro
+      - app-data:/app/data
+      - app-uploads:/app/uploads
+      - app-logs:/app/logs
+    networks: [qualification]
+    mem_limit: 1536m
+    cpus: 2.0
+    restart: "no"
+networks:
+  qualification:
+    internal: true
+volumes:
+  mongo-data:
+  app-data:
+  app-uploads:
+  app-logs:

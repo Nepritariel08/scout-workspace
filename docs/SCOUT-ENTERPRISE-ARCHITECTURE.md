@@ -115,7 +115,18 @@ by submitting `tenant_id`, `user_id`, a role or an Odoo UID. Strip untrusted
 identity headers at ingress, and validate audience/expiry again at tool servers.
 
 Roles define allowed capabilities. Resource relationships define the actual
-records/documents/devices those capabilities apply to. Proposed initial policy:
+records/documents/devices those capabilities apply to.
+
+Provision each tenant's versioned capability policy before admitting its users;
+reject admission if the tenant lacks an approved policy. Qualify policy updates
+and revocation with cache invalidation and API readback. The initial LibreChat
+runtime check found that disabling a capability in YAML updated platform roles
+while a new tenant could receive permissive default roles. Explicit tenant-role
+provisioning made the tested API denials pass; see the
+[qualification evidence](SCOUT-LIBRECHAT-QUALIFICATION.md). A hidden menu does
+not establish server-side denial.
+
+Proposed initial policy:
 
 | Actor | Context and actions |
 | --- | --- |
@@ -324,9 +335,11 @@ queue owner's test/monitor in Issue #4; do not create a second countdown.
 - Actual tablet layout/login/reconnect, native consent/action readback and
   owner-approved PC-off acceptance pass before those capabilities are claimed.
 
-These are required release tests, not tests already run by publishing this
-document. The prior synthetic owner pilot remains useful but does not satisfy
-employee/customer tenancy acceptance.
+These are release criteria. Selected synthetic chat/file/tenant/capability and
+recovery checks are recorded in the [qualification report](SCOUT-LIBRECHAT-QUALIFICATION.md);
+the remaining identity, source, action, device and operating criteria are not
+satisfied by those results. The prior synthetic owner pilot remains useful but
+does not satisfy employee/customer tenancy acceptance.
 
 ## Sources and open decisions
 

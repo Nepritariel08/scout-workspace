@@ -14,6 +14,12 @@ boundary. Use one product and pinned upstream components, with small Scout
 adapters rather than maintaining several full chat forks. Existing Open Duet
 owner-pilot evidence remains valid for its tested scope.
 
+Source fork [Nepritariel08/scout-platform](https://github.com/Nepritariel08/scout-platform)
+now exists with its upstream MIT attribution retained. The selected release pin
+is available there; its default branch is not an approved production build.
+The existing Scout/Open Duet fork remains the contract/reference pilot during
+integration; no second public chat app has been activated.
+
 The initial Open Duet selection addressed a personal workspace/queue pilot.
 Employee/customer access materially expands that requirement. Building a full
 multi-user/tenant system inside its single-owner server is a larger maintenance
@@ -44,7 +50,7 @@ dependency/edition/branding review before distribution or customer service.
 - At the pinned LibreChat tag, authenticated middleware chains verified user
   context into tenant handling; file access compares user and file tenants;
   tenant bulk-write helpers strip caller tenant fields and inject scoped values.
-  Corresponding source test files were observed. **Those tests were not run.**
+  Corresponding source test files were observed. **Tests at v0.8.8 were not run.**
   This checks relevant implementation presence, not every endpoint/background
   job or a complete security audit.
 - Ten most-recent retrieved exact-tag workflow entries included successful
@@ -53,6 +59,14 @@ dependency/edition/branding review before distribution or customer service.
   plus successful/skipped retry workflows. This limited result set does not
   establish a freshly passing full backend/security suite. Requalify a patched,
   digest-pinned release before a deployed pilot.
+- Follow-up qualification used **v0.8.9-rc1** at
+  `8d3da9bbb220a0a96be9330a2e1cbd385fb786d5`, with a digest-pinned isolated
+  runtime. Selected source checks passed187 tests unchanged plus53 with a
+  Windows-only test-launch patch;82 real HTTP checks passed after explicit
+  tenant-role provisioning and after a synthetic database restore. A new
+  tenant's default roles did not automatically inherit YAML platform denies.
+  See [exact inputs, findings, limits and harness](SCOUT-LIBRECHAT-QUALIFICATION.md).
+  This is progress toward qualification, not deployment or shared-user approval.
 - **Open WebUI:** release `v0.12.5`, commit
   `f7ac7ee10962ddec0017f5c29b6740d9b9c5faca`, release metadata not prerelease.
   License/RBAC documentation read; no local runtime/tests.

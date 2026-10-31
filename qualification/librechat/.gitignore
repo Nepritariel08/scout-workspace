@@ -1,0 +1,4 @@
+.env.qa
+backups/
+results/
+*.archive*
