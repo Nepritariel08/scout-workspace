@@ -7,6 +7,7 @@
 import type { ThreadEvent } from "./api";
 import type { RecalledNote, RecalledPassage } from "./memory";
 import type { NeedsYouRow } from "./needs-you";
+import { scoutReceipt, type ScoutReceipt } from "./scout-queue.ts";
 
 export type ApprovalStatus = "pending" | "allowed" | "denied" | "expired" | "cancelled";
 
@@ -20,6 +21,7 @@ export type TeamJobItem = { kind: "team_job"; key: string; turnId: number | null
 export type NeedsYouItem = { kind: "needs_you"; key: string; turnId: number | null; cardId: string; revision: number; title: string; subtitle: string; emptyText: string; more: number; checkedAt?: string; providerCheckedAt?: string; timeZone?: string; sources?: Record<string, string>; rows: NeedsYouRow[] };
 
 export type TranscriptItem =
+  | { kind: "scout_work"; key: string; turnId: number; receipt: ScoutReceipt }
   | TeamJobItem
   | NeedsYouItem
   | { kind: "team_notice"; key: string; turnId: number | null; tone: "incident" | "escalation" | "refused" | "retried"; text: string; threadId: number | null }
@@ -184,6 +186,15 @@ export function applyEvent(state: Transcript, event: ThreadEvent): Transcript {
   const base: Transcript = { ...state, lastSeq: event.seq };
 
   switch (event.type) {
+    case "scout.requested":
+    case "scout.work": {
+      if (id === null) return base;
+      const existing = state.items.find(item => item.kind === "scout_work" && item.turnId === id);
+      const receipt = scoutReceipt(existing?.kind === "scout_work" ? existing.receipt : null, event.type, data);
+      if (receipt === null) return base;
+      const item: TranscriptItem = { kind: "scout_work", key: `scout-${id}`, turnId: id, receipt };
+      return { ...base, items: existing ? state.items.map(value => value === existing ? item : value) : [...state.items, item] };
+    }
     case "turn.started":
       return {
         ...base,

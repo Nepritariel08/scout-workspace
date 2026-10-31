@@ -240,7 +240,7 @@ def test_config_validation_keeps_the_key_only_for_the_same_address():
     assert adapter.validate_config({"base_url": BASE}, saved)["api_key"] == KEY
     assert "api_key" not in adapter.validate_config({"base_url": "http://other.test/v1"}, saved)
     assert "api_key" not in adapter.validate_config({"base_url": BASE, "clear_api_key": True}, saved)
-    assert adapter.public_config(saved) == {"base_url": BASE, "model": "m", "has_api_key": True}
+    assert adapter.public_config(saved) == {"base_url": BASE, "model": "m", "has_api_key": True, "max_output_tokens": 1024}
     assert KEY not in json.dumps(adapter.public_config(saved))
     for bad in ("", "ftp://x", "http://u:p@x", "http://x?key=1", "http://x y", "nohost"):
         with pytest.raises(InvalidConfig):

@@ -26,6 +26,7 @@ import {
 
 import { NeedsYouCard } from "./NeedsYouCard";
 import { RoutineChangeCard } from "./RoutineChangeCard";
+import { ScoutWorkCard } from "./ScoutWorkCard";
 import { DelegationCard, AgentCreatedCard, TeamNoticeCard, TeamSetupCard } from "./TeamCards";
 
 const STICK_DISTANCE_PX = 80;
@@ -143,6 +144,8 @@ export function Conversation({
 
           {groupToolRuns(transcript.items).map((item) => {
             switch (item.kind) {
+              case "scout_work":
+                return <ScoutWorkCard key={item.key} item={item} threadId={threadId} running={transcript.runningTurnId === item.turnId} />;
               case "needs_you":
                 return <NeedsYouCard key={item.key} item={item} />;
               case "team_job":

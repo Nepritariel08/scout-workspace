@@ -9,6 +9,8 @@ from app.desktop import profile
 
 
 class Settings(BaseSettings):
+    # Operator-owned requester MCP binding; never selected by prompt text.
+    SCOUT_QUEUE_CONFIG_FILE: str = ""
     BOAT_BASE_URL : str = "https://boat.dev/api/v1"
     # Boat is optional. Empty means no Boat sandboxes: the app starts without
     # it and anything that needs a sandbox answers "Boat is not configured".
