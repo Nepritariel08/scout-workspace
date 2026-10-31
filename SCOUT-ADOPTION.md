@@ -99,9 +99,9 @@ Local qualification uses an isolated Python 3.14.7 environment and an SSD
 checkout; the Google Drive checkout remains the bootstrap snapshot. No
 production credentials or production database are used in tests.
 
-Local adapter checkpoint (2026-11-01): 91 focused backend tests passed across
+Local adapter checkpoint (2026-11-01): 100 focused backend tests passed across
 the Scout queue, engine registry, compatible chat/OpenRouter engines and
-conversation runtime; all 298 frontend tests passed. Frontend production and
+conversation runtime and engine settings API; all 298 frontend tests passed. Frontend production and
 static-export builds passed. ESLint had zero errors and four warnings in
 unchanged components. Full backend/OS qualification is provided separately by
 the fork's exact-head PR checks. No live provider or Odoo/DSH receipt exists at
