@@ -90,7 +90,7 @@ No worker or business-action capability was added to this workspace.
 
 Native chat routes now send an output-token cap. OpenRouter also applies an
 explicit provider unit-price ceiling (default free-only), excludes per-request
-fees, disables provider fallback and retains reported cost with token usage.
+fees, allows provider fallback within the price filters and retains reported cost with token usage.
 These controls also apply to the native background text path. They do not
 configure DSH's separate model profile or impose a cumulative account budget.
 

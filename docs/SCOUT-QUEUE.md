@@ -74,9 +74,10 @@ endpoint and credential. Neither chat engine advertises tool/computer access.
 Both chat routes send `max_tokens` (default 1,024, configurable 1–32,768), also
 for background calls. OpenRouter additionally sends a provider price ceiling
 for prompt and completion tokens, excludes per-request fees, requires parameter
-support and disables provider fallbacks. The price default is **0**, permitting
+support and allows provider fallbacks within the same price filters. The price default is **0**, permitting
 free providers only. Use a free model such as `openrouter/free` for initial
-qualification and 64 output tokens. A paid route needs an explicit nonzero
+qualification and a bounded output allowance (1,024 tokens accommodates more
+reasoning models than a 64-token probe). A paid route needs an explicit nonzero
 price ceiling. This is a provider **unit-price** limit, not an account budget;
 set an OpenRouter API-key credit limit for a cumulative spending ceiling.
 

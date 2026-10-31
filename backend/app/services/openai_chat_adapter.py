@@ -470,7 +470,7 @@ class OpenRouterAdapter(OpenAIChatAdapter):
     def request_limits(self, config):
         price = config.get("max_price_per_million", 0)
         return {**super().request_limits(config), "provider": {
-            "require_parameters": True, "allow_fallbacks": False,
+            "require_parameters": True, "allow_fallbacks": True,
             "max_price": {"prompt": price, "completion": price, "request": 0},
         }}
 

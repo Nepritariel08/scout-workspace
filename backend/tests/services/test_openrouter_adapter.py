@@ -145,7 +145,7 @@ async def test_a_turn_goes_to_openrouter_with_its_own_saved_config(ort, sessions
     assert request.headers["authorization"] == f"Bearer {KEY}" and request.headers["x-title"] == "Scout Workspace"
     body = json.loads(request.content)
     assert body["model"] == MODEL and body["max_tokens"] == 1024
-    assert body["provider"] == {"require_parameters": True, "allow_fallbacks": False,
+    assert body["provider"] == {"require_parameters": True, "allow_fallbacks": True,
                                 "max_price": {"prompt": 0, "completion": 0, "request": 0}}
     # The plain OpenAI-compatible engine keeps its own address and sends no OpenRouter headers.
     other = await ort.create_thread(provider="openai_compat")
