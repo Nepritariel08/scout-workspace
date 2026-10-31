@@ -4,6 +4,8 @@ Date: 2026-11-01 (Asia/Shanghai)
 
 Engineering tracker: [SSC AI Enablement #4](https://github.com/Nepritariel08/ssc-ai-enablement/issues/4), under [architecture #8](https://github.com/Nepritariel08/ssc-ai-enablement/issues/8).
 
+Source bootstrap: [Scout Workspace PR #1](https://github.com/Nepritariel08/scout-workspace/pull/1). The fork's existing Actions workflows are enabled; its PR checks provide the current fork-head status separately from the upstream evidence below.
+
 ## Decision and scope
 
 Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The Scout execution integration has not been implemented or activated.
@@ -15,7 +17,7 @@ Use Open Duet as the source foundation for an independently maintained Scout wor
 - Local branch: `scout/bootstrap-20261101`
 - Remotes: `origin` is the Scout fork; `upstream` retains the original source. Upstream pushes are disabled in this checkout.
 - License: Apache-2.0. Preserve the upstream license, attribution, and applicable notices when adapting or distributing the code.
-- Owner: Codex, current OpenDots assessment/adoption session. This checkout is independent of the active DSH/Community queue source lane and the Community migration host owner.
+- Owner: Codex, chat `01a19336-83fb-7ab0-9829-6fc1c290c93f`. This checkout is independent of the active DSH/Community queue source lane and the Community migration host owner.
 
 ## Candidates compared
 
