@@ -1,0 +1,16 @@
+services:
+  mongo-restore:
+    image: mongo:8.0.20@sha256:098862b1339f031900ca66cf8fef799e616d6324fa41b9a263f2ec899552c1ef
+    command: ["mongod", "--bind_ip_all", "--quiet"]
+    volumes:
+      - mongo-restore-data:/data/db
+    networks: [qualification]
+    mem_limit: 768m
+    cpus: 1.0
+    restart: "no"
+  app:
+    environment:
+      MONGO_URI: mongodb://mongo-restore:27017/ScoutQualification
+    depends_on: [mongo-restore]
+volumes:
+  mongo-restore-data:

@@ -1,0 +1,15 @@
+diff --git a/api/server/routes/__tests__/auth.tenant.spec.js b/api/server/routes/__tests__/auth.tenant.spec.js
+index 31b8ba0..e04f534 100644
+--- a/api/server/routes/__tests__/auth.tenant.spec.js
++++ b/api/server/routes/__tests__/auth.tenant.spec.js
+@@ -39,7 +39,9 @@ describe.each([false, true])('pre-auth tenant routes (strict=%s)', (strictMode)
+     bcrypt = require('bcryptjs');
+     schemas = require('@librechat/data-schemas');
+     api = require('@librechat/api');
+-    mongo = await MongoMemoryServer.create({ instance: { args: ['--nounixsocket'] } });
++    mongo = await MongoMemoryServer.create({
++      instance: { args: process.platform === 'win32' ? [] : ['--nounixsocket'] },
++    });
+     await mongoose.connect(mongo.getUri());
+     schemas.createModels(mongoose);
+     models = require('~/models');

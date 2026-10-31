@@ -88,3 +88,5 @@ class EngineConfigRequest(BaseModel):
     # OpenAI-compatible: the model's context window in tokens; long
     # conversations are folded at 80% of it (docs/MEMORY.md).
     context_tokens: int | None = None
+    max_output_tokens: int | None = Field(default=None, ge=1, le=32768)
+    max_price_per_million: float | None = Field(default=None, ge=0, le=1000, allow_inf_nan=False)

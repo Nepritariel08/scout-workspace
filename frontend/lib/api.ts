@@ -574,6 +574,8 @@ export type EngineConfigInput = {
   api_key?: string;
   clear_api_key?: boolean;
   context_tokens?: number;
+  max_output_tokens?: number;
+  max_price_per_million?: number;
 };
 
 export type ComposioStatus = { configured: boolean; apps: ComposioApp[] };
@@ -1567,3 +1569,7 @@ async function requestBlobUrl(path: string): Promise<string> {
 }
 
 export { ApiError };
+
+export function scoutQueueAction(threadId: number, turnId: number, action: "refresh" | "recover" | "accept" | "cancel", revision?: number): Promise<Record<string, unknown>> {
+  return request(`/threads/${threadId}/scout/${turnId}`, { method: "POST", body: JSON.stringify({ action, ...(revision === undefined ? {} : { revision }) }) });
+}

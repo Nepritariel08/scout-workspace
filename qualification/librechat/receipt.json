@@ -1,0 +1,407 @@
+{
+  "recorded_at_utc": "2026-10-31T21:53:45.8044673Z",
+  "source_tag": "v0.8.9-rc1",
+  "prerelease": true,
+  "source_commit": "8d3da9bbb220a0a96be9330a2e1cbd385fb786d5",
+  "app_image_digest": "sha256:26e3290c82002fd5e4d5e0fd8f7de4d2f2a430f12049d82190d1e4a80f2a3cb2",
+  "mongo_image_digest": "sha256:098862b1339f031900ca66cf8fef799e616d6324fa41b9a263f2ec899552c1ef",
+  "source_results": [
+    {
+      "name": "data-schema-isolation",
+      "test_only_portability_patch": false,
+      "passed_tests": 88,
+      "failed_tests": 0,
+      "passed_suites": 4,
+      "failed_suites": 0
+    },
+    {
+      "name": "tenant-and-auth-cache",
+      "test_only_portability_patch": false,
+      "passed_tests": 44,
+      "failed_tests": 0,
+      "passed_suites": 3,
+      "failed_suites": 0
+    },
+    {
+      "name": "backend-jwt-and-files-original-auth-route-failure",
+      "test_only_portability_patch": false,
+      "passed_tests": 55,
+      "failed_tests": 53,
+      "passed_suites": 2,
+      "failed_suites": 1
+    },
+    {
+      "name": "auth-route-windows-portability",
+      "test_only_portability_patch": true,
+      "passed_tests": 53,
+      "failed_tests": 0,
+      "passed_suites": 1,
+      "failed_suites": 0
+    }
+  ],
+  "final_selected_passing_tests": 240,
+  "final_selected_passing_suites": 10,
+  "original_failure_retained": "53 auth-route cases failed at Windows Mongo startup: unrecognised --nounixsocket; patched rerun passed",
+  "http_after_fresh_mongo_restore": {
+    "at_utc": "2026-10-31T21:52:13.955Z",
+    "checks": 82,
+    "passed": 82,
+    "results": [
+      {
+        "name": "strict-login-no-tenant",
+        "status": 403
+      },
+      {
+        "name": "strict-login-invalid-tenant",
+        "status": 403
+      },
+      {
+        "name": "strict-login-invalid-tenant",
+        "status": 403
+      },
+      {
+        "name": "registration-disabled",
+        "status": 403
+      },
+      {
+        "name": "anonymous-conversations",
+        "status": 401
+      },
+      {
+        "name": "staff-one-login",
+        "status": 200
+      },
+      {
+        "name": "staff-two-login",
+        "status": 200
+      },
+      {
+        "name": "customer-a-login",
+        "status": 200
+      },
+      {
+        "name": "customer-b-login",
+        "status": 200
+      },
+      {
+        "name": "staff-one-own-conversation",
+        "status": 200
+      },
+      {
+        "name": "staff-one-own-messages",
+        "status": 200
+      },
+      {
+        "name": "staff-one-own-file",
+        "status": 200
+      },
+      {
+        "name": "staff-one-own-list",
+        "status": 200
+      },
+      {
+        "name": "staff-one-header-cannot-change-identity",
+        "status": 200
+      },
+      {
+        "name": "staff-one-mcp-use-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-one-mcp-tools-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-one-mcp-create-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-one-to-staff-two-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-staff-two-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-staff-two-file",
+        "status": 403
+      },
+      {
+        "name": "staff-one-to-customer-a-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-customer-a-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-customer-a-file",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-customer-b-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-customer-b-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-one-to-customer-b-file",
+        "status": 404
+      },
+      {
+        "name": "staff-one-bad-signature",
+        "status": 401
+      },
+      {
+        "name": "staff-two-own-conversation",
+        "status": 200
+      },
+      {
+        "name": "staff-two-own-messages",
+        "status": 200
+      },
+      {
+        "name": "staff-two-own-file",
+        "status": 200
+      },
+      {
+        "name": "staff-two-own-list",
+        "status": 200
+      },
+      {
+        "name": "staff-two-header-cannot-change-identity",
+        "status": 200
+      },
+      {
+        "name": "staff-two-mcp-use-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-two-mcp-tools-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-two-mcp-create-disabled",
+        "status": 403
+      },
+      {
+        "name": "staff-two-to-staff-one-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-staff-one-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-staff-one-file",
+        "status": 403
+      },
+      {
+        "name": "staff-two-to-customer-a-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-customer-a-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-customer-a-file",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-customer-b-conversation",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-customer-b-messages",
+        "status": 404
+      },
+      {
+        "name": "staff-two-to-customer-b-file",
+        "status": 404
+      },
+      {
+        "name": "staff-two-bad-signature",
+        "status": 401
+      },
+      {
+        "name": "customer-a-own-conversation",
+        "status": 200
+      },
+      {
+        "name": "customer-a-own-messages",
+        "status": 200
+      },
+      {
+        "name": "customer-a-own-file",
+        "status": 200
+      },
+      {
+        "name": "customer-a-own-list",
+        "status": 200
+      },
+      {
+        "name": "customer-a-header-cannot-change-identity",
+        "status": 200
+      },
+      {
+        "name": "customer-a-mcp-use-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-a-mcp-tools-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-a-mcp-create-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-a-to-staff-one-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-staff-one-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-staff-one-file",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-staff-two-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-staff-two-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-staff-two-file",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-customer-b-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-customer-b-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-a-to-customer-b-file",
+        "status": 404
+      },
+      {
+        "name": "customer-a-bad-signature",
+        "status": 401
+      },
+      {
+        "name": "customer-b-own-conversation",
+        "status": 200
+      },
+      {
+        "name": "customer-b-own-messages",
+        "status": 200
+      },
+      {
+        "name": "customer-b-own-file",
+        "status": 200
+      },
+      {
+        "name": "customer-b-own-list",
+        "status": 200
+      },
+      {
+        "name": "customer-b-header-cannot-change-identity",
+        "status": 200
+      },
+      {
+        "name": "customer-b-mcp-use-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-b-mcp-tools-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-b-mcp-create-disabled",
+        "status": 403
+      },
+      {
+        "name": "customer-b-to-staff-one-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-staff-one-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-staff-one-file",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-staff-two-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-staff-two-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-staff-two-file",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-customer-a-conversation",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-customer-a-messages",
+        "status": 404
+      },
+      {
+        "name": "customer-b-to-customer-a-file",
+        "status": 404
+      },
+      {
+        "name": "customer-b-bad-signature",
+        "status": 401
+      },
+      {
+        "name": "retired-bearer-after-credential-change",
+        "status": 401
+      }
+    ]
+  },
+  "synthetic_archive": {
+    "bytes": 14874,
+    "sha256": "a113b280c58b9929fd6f8cab55e05967dbea582f1f61c6d1d4e6d546424329fe",
+    "scope": "Mongo synthetic DB, preserving existing disposable app keys and fixture manifest"
+  },
+  "scope_limits": [
+    "No full upstream suite or penetration test",
+    "No real identity provider or trusted gateway",
+    "No Odoo source/queue binding",
+    "No real customer corpus or model requests",
+    "No production or shared-user activation",
+    "No offhost or encryption-key-loss recovery"
+  ],
+  "fresh_bootstrap": {
+    "at_utc": "2026-10-31T21:54:53.095Z",
+    "checks": 82,
+    "passed": 82,
+    "policy_applied_before_first_login": true
+  },
+  "runtime_release": {
+    "containers": 5,
+    "all_stopped": true,
+    "exit_code": 0,
+    "oom_killed": false,
+    "wsl_helper_ended": true,
+    "volumes_and_private_archive_retained": true
+  }
+}

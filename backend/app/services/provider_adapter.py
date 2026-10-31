@@ -207,6 +207,10 @@ class TurnContext:
     images: list[dict] = field(default_factory=list)
     _abort_callbacks: list[Callable[[], None]] = field(default_factory=list)
     aborted: bool = False
+    # A person's Stop differs from shutdown/lease loss for remote queue work.
+    stop_requested: bool = False
+    # Authenticated application owner; distinct from an external queue user.
+    owner_id: str | None = None
 
     def on_abort(self, callback: Callable[[], None]) -> None:
         """Register what stops the provider's work (kill the process, close the

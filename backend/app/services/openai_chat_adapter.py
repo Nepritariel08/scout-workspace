@@ -20,6 +20,7 @@ headers (sent to openrouter.ai only).
 
 import asyncio
 import json
+import math
 from urllib.parse import urlsplit
 
 import httpx
@@ -49,7 +50,7 @@ NOT_CONFIGURED = "Set the endpoint's address (and key, if it needs one) in Setti
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 OPENROUTER_HOST = "openrouter.ai"
 # OpenRouter's optional app attribution (its public app rankings).
-OPENROUTER_ATTRIBUTION = {"HTTP-Referer": "https://github.com/Anil-matcha/open-duet", "X-Title": "Open Duet"}
+OPENROUTER_ATTRIBUTION = {"HTTP-Referer": "https://github.com/Nepritariel08/scout-workspace", "X-Title": "Scout Workspace"}
 
 
 class InvalidConfig(ValueError):
@@ -104,6 +105,7 @@ class OpenAIChatAdapter:
         {"name": "base_url", "label": "Base URL", "kind": "url", "required": True,
          "placeholder": "https://api.example.com/v1"},
         {"name": "model", "label": "Default model", "placeholder": "Use endpoint default"},
+        {"name": "max_output_tokens", "label": "Maximum output tokens", "placeholder": "1024", "advanced": True},
         {"name": "api_key", "label": "API key", "kind": "secret",
          "help": "Encrypted at rest. Leave empty to keep the saved key for this address."},
     ]
@@ -161,6 +163,11 @@ class OpenAIChatAdapter:
             if isinstance(window, bool) or not isinstance(window, int) or not 1_024 <= window <= 10_000_000:
                 raise InvalidConfig("The context window must be a whole number of tokens from 1024 to 10000000.")
             config["context_tokens"] = window
+        limit = payload.get("max_output_tokens")
+        if limit is not None:
+            if type(limit) is not int or not 1 <= limit <= 32768:
+                raise InvalidConfig("Maximum output tokens must be a whole number from 1 to 32768.")
+            config["max_output_tokens"] = limit
         key = payload.get("api_key")
         if payload.get("clear_api_key"):
             pass
@@ -184,7 +191,11 @@ class OpenAIChatAdapter:
         }
         if config.get("context_tokens"):
             public["context_tokens"] = config["context_tokens"]
+        public["max_output_tokens"] = config.get("max_output_tokens", 1024)
         return public
+
+    def request_limits(self, config: dict) -> dict:
+        return {"max_tokens": config.get("max_output_tokens", 1024)}
 
     def _headers(self, config: dict) -> dict:
         headers = {"Accept": "application/json"}
@@ -246,7 +257,8 @@ class OpenAIChatAdapter:
         model = model or config.get("model")
         if not base or not model:
             raise RuntimeError("This endpoint has no address or model for a background call.")
-        body = {"model": model, "messages": [{"role": "user", "content": prompt}], "stream": False}
+        body = {"model": model, "messages": [{"role": "user", "content": prompt}], "stream": False,
+                **self.request_limits(config)}
         try:
             async with self._client(httpx.Timeout(timeout, connect=CONNECT_TIMEOUT_SECONDS)) as client:
                 response = await client.post(f"{base}/chat/completions", headers=self._headers(config), json=body)
@@ -301,7 +313,8 @@ class OpenAIChatAdapter:
         max_text = app_settings.get("LOCAL_MAX_OUTPUT_BYTES")
 
         async def stream() -> None:
-            body = {"model": model, "messages": messages, "stream": True, "stream_options": {"include_usage": True}}
+            body = {"model": model, "messages": messages, "stream": True,
+                    "stream_options": {"include_usage": True}, **self.request_limits(config)}
             timeout = httpx.Timeout(app_settings.get("LOCAL_TASK_TIMEOUT_SECONDS"), connect=CONNECT_TIMEOUT_SECONDS)
             async with self._client(timeout) as client:
                 async with client.stream(
@@ -335,6 +348,9 @@ class OpenAIChatAdapter:
                                 for theirs, ours in (("prompt_tokens", "input_tokens"), ("completion_tokens", "output_tokens"))
                                 if isinstance(usage.get(theirs), int)
                             } or None
+                            cost = usage.get("cost")
+                            if type(cost) in (int, float) and math.isfinite(cost) and cost >= 0:
+                                state["usage"] = {**(state["usage"] or {}), "cost_usd": cost}
                         for choice in chunk.get("choices") or []:
                             if not isinstance(choice, dict):
                                 continue
@@ -408,6 +424,9 @@ class OpenRouterAdapter(OpenAIChatAdapter):
     config_fields = [
         {"name": "api_key", "label": "OpenRouter API key", "kind": "secret", "required": True},
         {"name": "model", "label": "Default model", "placeholder": "provider/model"},
+        {"name": "max_output_tokens", "label": "Maximum output tokens", "placeholder": "1024"},
+        {"name": "max_price_per_million", "label": "Maximum USD per million tokens", "placeholder": "0",
+         "help": "Applies to input and output. Default 0 allows free providers only. Per-request fees are excluded. This is a price ceiling; set a key credit limit in OpenRouter for a total budget."},
     ]
     setup = {
         "credential": "api_key", "docs_url": "https://openrouter.ai/keys",
@@ -436,7 +455,24 @@ class OpenRouterAdapter(OpenAIChatAdapter):
         config = super().validate_config(payload, current)
         if not config.get("api_key"):
             raise InvalidConfig("Give your OpenRouter API key (openrouter.ai → Keys).")
+        price = payload.get("max_price_per_million", 0)
+        if type(price) not in (int, float) or not math.isfinite(price) or not 0 <= price <= 1000:
+            raise InvalidConfig("The token price ceiling must be a number from 0 to 1000 USD per million tokens.")
+        config["max_price_per_million"] = price
         return config
+
+    def public_config(self, config):
+        public = super().public_config(config)
+        if public is not None:
+            public["max_price_per_million"] = config.get("max_price_per_million", 0)
+        return public
+
+    def request_limits(self, config):
+        price = config.get("max_price_per_million", 0)
+        return {**super().request_limits(config), "provider": {
+            "require_parameters": True, "allow_fallbacks": True,
+            "max_price": {"prompt": price, "completion": price, "request": 0},
+        }}
 
     def _headers(self, config: dict) -> dict:
         headers = super()._headers(config)

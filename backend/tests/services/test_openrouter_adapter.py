@@ -56,9 +56,10 @@ async def ort(sessions, owner, monkeypatch, endpoint, tmp_path):
 def test_config_defaults_the_address_and_requires_a_key():
     adapter = OpenRouterAdapter()
     saved = adapter.validate_config({"api_key": KEY, "model": MODEL}, None)
-    assert saved == {"base_url": OPENROUTER_BASE_URL, "model": MODEL, "api_key": KEY}
+    assert saved == {"base_url": OPENROUTER_BASE_URL, "model": MODEL, "api_key": KEY, "max_price_per_million": 0}
     assert adapter.validate_config({}, saved)["api_key"] == KEY
-    assert adapter.public_config(saved) == {"base_url": OPENROUTER_BASE_URL, "model": MODEL, "has_api_key": True}
+    assert adapter.public_config(saved) == {"base_url": OPENROUTER_BASE_URL, "model": MODEL, "has_api_key": True,
+                                             "max_output_tokens": 1024, "max_price_per_million": 0}
     for payload in ({}, {"api_key": "  "}, {"base_url": "https://proxy.test/v1", "api_key": KEY}, {"clear_api_key": True}):
         with pytest.raises(InvalidConfig):
             adapter.validate_config(payload, None)
@@ -85,7 +86,7 @@ async def test_probe_lists_openrouter_models_with_the_headers(endpoint):
     request = endpoint.requests[1]
     assert str(request.url) == "https://openrouter.ai/api/v1/models"
     assert request.headers["authorization"] == f"Bearer {KEY}"
-    assert request.headers["x-title"] == "Open Duet" and request.headers["http-referer"].startswith("https://")
+    assert request.headers["x-title"] == "Scout Workspace" and request.headers["http-referer"].startswith("https://")
 
 
 async def test_invalid_key_is_not_ready_even_with_public_models(endpoint):
@@ -141,8 +142,11 @@ async def test_a_turn_goes_to_openrouter_with_its_own_saved_config(ort, sessions
     assert data_of(events, "assistant.message") == [{"text": "Hello"}]
     request = next(r for r in endpoint.requests if r.method == "POST")
     assert str(request.url) == "https://openrouter.ai/api/v1/chat/completions"
-    assert request.headers["authorization"] == f"Bearer {KEY}" and request.headers["x-title"] == "Open Duet"
-    assert json.loads(request.content)["model"] == MODEL
+    assert request.headers["authorization"] == f"Bearer {KEY}" and request.headers["x-title"] == "Scout Workspace"
+    body = json.loads(request.content)
+    assert body["model"] == MODEL and body["max_tokens"] == 1024
+    assert body["provider"] == {"require_parameters": True, "allow_fallbacks": True,
+                                "max_price": {"prompt": 0, "completion": 0, "request": 0}}
     # The plain OpenAI-compatible engine keeps its own address and sends no OpenRouter headers.
     other = await ort.create_thread(provider="openai_compat")
     await ort.send_turn(other.id, "hi")
@@ -157,6 +161,41 @@ async def test_a_turn_without_a_saved_key_is_refused(ort, sessions, owner, endpo
     with pytest.raises(ProviderUnavailable, match="OpenRouter API key"):
         await ort.send_turn(thread.id, "hi")
     assert endpoint.requests == []
+
+
+@pytest.mark.parametrize("price", [-1, float("nan"), float("inf"), True, "1", 1001])
+def test_invalid_price_limits_are_refused(price):
+    with pytest.raises(InvalidConfig):
+        OpenRouterAdapter().validate_config({"api_key": KEY, "max_price_per_million": price}, None)
+
+
+async def test_bounded_background_calls_use_the_same_price_and_output_limits(endpoint):
+    endpoint.handler = lambda r: httpx.Response(200, json={"choices": [{"message": {"content": "OK"}}]})
+    adapter = OpenRouterAdapter(transport=httpx.MockTransport(endpoint))
+    config = adapter.validate_config({"api_key": KEY, "model": MODEL, "max_output_tokens": 64,
+                                      "max_price_per_million": 0.5}, None)
+    assert await adapter.generate_text("Synthetic test", config=config) == "OK"
+    body = endpoint.body()
+    assert body["max_tokens"] == 64 and body["provider"]["max_price"] == {"prompt": 0.5, "completion": 0.5, "request": 0}
+
+
+async def test_reported_cost_is_preserved_with_the_conversation(endpoint):
+    from app.services.provider_adapter import TurnContext
+    from tests.services.test_openai_chat_adapter import sse, delta
+    endpoint.handler = lambda r: httpx.Response(200, content=sse(delta("OK"), delta("", "stop"),
+        {"choices": [], "usage": {"prompt_tokens": 8, "completion_tokens": 1, "cost": 0}}),
+        headers={"content-type": "text/event-stream"})
+    adapter = OpenRouterAdapter(transport=httpx.MockTransport(endpoint))
+    async def history(): return []
+    ctx = TurnContext(1, 1, "Synthetic test", None, MODEL, None, None, False, history,
+                      engine_config={"base_url": OPENROUTER_BASE_URL, "api_key": KEY, "max_output_tokens": 64})
+    class Sink:
+        lost = False
+        def delta(self, text): pass
+        async def emit(self, type, data): return True
+    outcome = await adapter.run_turn(ctx, Sink(), None)
+    assert outcome.status == "succeeded" and outcome.usage == {"input_tokens": 8, "output_tokens": 1, "cost_usd": 0}
+    assert endpoint.body()["max_tokens"] == 64
 
 
 async def test_openrouter_replays_a_continuing_conversation_on_fallback(ort, sessions, owner, endpoint, tmp_path):

@@ -812,6 +812,7 @@ class ThreadRuntime:
 
         explicit_memory = memory_explicit.prepare(agent, thread, turn, internal=internal)
         ctx = TurnContext(
+            owner_id=self.owner_id,
             thread_id=thread_id,
             turn_id=turn.id,
             prompt=handoff + agent_skills.prompt_block(chosen_skills) + memory_recall.with_recall(recall, attachments.prompt_with_text_files(prompt_text, attached)),
@@ -1065,6 +1066,7 @@ class ThreadRuntime:
             raise TurnNotHere(thread_id) if running is not None else NoRunningTurn(thread_id)
         await self.team_jobs.cancel_for_turn(run.turn_id)
         run.stop_requested = True
+        run.ctx.stop_requested = True
         run.ctx.abort()
         return run.turn_id
 
@@ -1314,6 +1316,7 @@ class ThreadRuntime:
             return limited
         old = run.ctx
         run.ctx = TurnContext(
+            owner_id=old.owner_id,
             thread_id=old.thread_id,
             turn_id=old.turn_id,
             prompt=old.prompt,
@@ -1337,6 +1340,7 @@ class ThreadRuntime:
             images=list(old.images),
         )
         if old.aborted:
+            run.ctx.stop_requested = old.stop_requested
             run.ctx.abort()
         run.engine_id, run.switched = fallback_id, True
         run.touch()

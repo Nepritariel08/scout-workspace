@@ -2,6 +2,7 @@
 Real routes, runtime and database; the OpenAI-compatible endpoint is a mock."""
 
 import json
+import shlex
 import sys
 from pathlib import Path
 
@@ -112,7 +113,7 @@ async def test_openai_config_is_encrypted_and_secrets_are_never_returned(api, se
     )
     assert put.status_code == 200, put.text
     body = put.json()
-    assert body["config"] == {"base_url": "http://llm.test/v1", "model": "m1", "has_api_key": True}
+    assert body["config"] == {"base_url": "http://llm.test/v1", "model": "m1", "has_api_key": True, "max_output_tokens": 1024}
     assert body["available"] and [m["id"] for m in body["models"]] == ["m1", "m2"] and body["default_model"] == "m1"
     assert KEY not in put.text
     for path in ("/api/v1/engines", "/api/v1/engines/openai_compat"):
@@ -141,8 +142,25 @@ async def test_delete_forgets_the_configuration(api, sessions, owner):
     assert (await api.delete("/api/v1/engines/openai_compat/config")).status_code == 204  # idempotent
 
 
+async def test_output_limit_can_be_set_through_settings_and_invalid_limits_are_refused(api):
+    response = await api.put("/api/v1/engines/openai_compat/config", json={
+        "base_url": "http://llm.test/v1", "max_output_tokens": "64",
+    })
+    assert response.status_code == 200 and response.json()["config"]["max_output_tokens"] == 64
+    for limit in (0, 32769, "invalid"):
+        invalid = await api.put("/api/v1/engines/openai_compat/config", json={
+            "base_url": "http://llm.test/v1", "max_output_tokens": limit,
+        })
+        assert invalid.status_code == 422
+    # OpenRouter routing policy must never be sent to an arbitrary local URL.
+    invalid = await api.put("/api/v1/engines/openai_compat/config", json={
+        "base_url": "http://llm.test/v1", "max_price_per_million": 0,
+    })
+    assert invalid.status_code == 422
+
+
 async def test_acp_config_and_the_validation_errors(api):
-    put = await api.put("/api/v1/engines/acp/config", json={"command": f"{sys.executable} {FAKE_ACP}", "label": "Fake"})
+    put = await api.put("/api/v1/engines/acp/config", json={"command": shlex.join([sys.executable, str(FAKE_ACP)]), "label": "Fake"})
     assert put.status_code == 200, put.text
     body = put.json()
     assert body["available"] and body["config"]["label"] == "Fake" and body["version"] == "fake-agent 1.2"
