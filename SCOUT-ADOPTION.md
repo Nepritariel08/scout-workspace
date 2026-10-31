@@ -31,6 +31,11 @@ This comparison supports a preferred starting point, not a general claim of prod
 
 ## Proposed Scout integration
 
+See the [Linode, Scout App and MatePad deployment plan](docs/SCOUT-SERVER-PLAN.md)
+for the proposed central workspace, owner-device pilot, multi-user gaps and
+acceptance beyond the physical PC-off check. It is a design, not a deployment
+or shared-access claim.
+
 ```text
 Scout browser / desktop interface
               |
