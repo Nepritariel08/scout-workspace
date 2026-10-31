@@ -8,7 +8,7 @@ Source bootstrap: [Scout Workspace PR #1](https://github.com/Nepritariel08/scout
 
 ## Decision and scope
 
-Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The source now includes a requester-only Scout execution adapter and conversation review controls. Live queue integration and activation remain unverified.
+Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The source includes a requester-only Scout execution adapter and conversation review controls. The private loopback workspace has passed live queue round-trip, human acceptance, bounded OpenRouter inference and client-crash recovery checks. Actual PC-off completion remains unverified.
 
 - Scout fork: https://github.com/Nepritariel08/scout-workspace
 - Upstream: https://github.com/Anil-matcha/open-duet
@@ -107,14 +107,21 @@ unchanged components. Full backend/OS qualification is provided separately by
 the fork's exact-head PR checks. No live provider or Odoo/DSH receipt exists at
 this source checkpoint.
 
-## Remaining live acceptance
+## Live pilot checkpoint — 2026-11-01
 
-The first useful outcome is one draft task submitted from the Scout workspace, executed once through the Odoo/DSH queue, and returned to the same conversation with its Odoo work-item ID and review state. The requester can then accept the draft. External business actions are outside this first slice.
+Current receipts and ownership are maintained in the [primary engineering checkpoint](https://github.com/Nepritariel08/ssc-ai-enablement/issues/4#issuecomment-6547459663). The checks below use the local web workspace and the existing remote Community queue. They do not qualify the native Windows desktop package or business-action tools.
 
-The queue source contract is in [SSC AI Enablement PR #88](https://github.com/Nepritariel08/ssc-ai-enablement/pull/88), reviewed for planning at `dba1dab16dcaa32c03984229c628cd866e02e712`. Its exact-head connector and clean Community CI passed. It remains a draft source PR; this is not a deployment claim. Reconcile its current reviewed head with its owner before implementing the adapter.
+| Check | Observed result |
+| --- | --- |
+| Source and CI | Application code `d7f39e80ecac2b017fc9935de117e161176aedb3`: [CI 41234659009](https://github.com/Nepritariel08/scout-workspace/actions/runs/41234659009) passed SQLite/PostgreSQL, frontend, desktop Node, sandbox and process smoke checks; mobile/isolated Chromium were path-filtered. |
+| Private requester binding | Active UID5/company1, pinned requester connector from queue executable contract `dba1dab16dcaa32c03984229c628cd866e02e712`. Existing requester credential is protected outside source; worker identity/key is excluded. Exact six-tool set and actual identity verified. |
+| Workspace round trip and acceptance | Conversation3/turn7 submitted task5 and received `SCOUT_DSH_WORKSPACE_OK`. The user accepted the synthetic draft; Odoo readback completed/revision4/accepted=true, one attempt. Acceptance performs no business action. |
+| Inference, streaming and limits | Native OpenRouter free route streamed six text deltas with a 1,024-token output cap and zero prompt/completion/request-price ceilings; receipt: 33 input/242 output tokens, reported cost $0. Persisted UI reply also succeeded. A separate UI turn exercised the output limit and another was stopped; final cancelled-request usage remains unknown. These are native route checks; DSH has its own model profile. |
+| Duplicate prevention and isolation | Exact original submission replay resolved to task5, one row/attempt/session. Wrong requester UID and company bindings were rejected without submission. Conversation receipt isolation verified. |
+| Actual client crash and recovery | Task7 began at 20:05:56.934330Z; the owned local backend was forcibly stopped at 20:06:04.556525Z; DSH returned `SCOUT_CLIENT_RECOVERY_OK` at 20:06:07.726837Z, still one attempt. After restart, normal stale-turn handling marked the local turn interrupted. Refresh status recovered task7/revision3 and Read draft displayed the result in the original conversation4/turn9, without resubmission. |
+| Failed probe and cancellation | Initial long-writing task6 failed in DSH before the crash test and is retained as failed evidence. It was then cancelled through its conversation task card; Odoo readback cancelled/revision4. It is not counted as a successful draft or crash check. |
+| PC-off completion | Not run. A read-only preparation check passed for a one-shot remote requester test: wait 120 seconds, submit one synthetic marker to the existing queue, observe for up to 300 seconds. Waiting for the user's physical shutdown availability; no delayed submission is armed. |
 
-1. Connect the prepared Scout adapter to an approved live requester binding and verify one queue task, its returned draft and explicit acceptance in the same conversation.
-2. Qualify the chosen OpenRouter/local route with a bounded model request, then streaming, cancellation, cost reporting and any separately authorized tool/approval flow.
-3. Verify service restart, expired claims, uncertain completion without duplicate execution, requester isolation and a task completed while the Windows client is off before replacing an existing workflow.
+The separate queue owner verified systemd restart and uncertain lease expiry without replay, then explicitly released the shared host lease in the [host release checkpoint](https://github.com/Nepritariel08/ssc-ai-enablement/issues/4#issuecomment-6548223582). That does not grant this lane an ongoing service/tunnel mutation lease. Any such change requires a fresh bounded ownership claim. Queue source [PR #88](https://github.com/Nepritariel08/ssc-ai-enablement/pull/88) remains a separate draft review; its documentation follow-up does not change the pinned executable contract.
 
-The existing Community host owner must release the shared deployment target before host work. This source preparation makes no host, connector, access, schedule or business-state change.
+Remaining acceptance: perform an actual Windows shutdown/startup test and compare its timestamps with the remote task's execution/result events. The prepared one-shot probe uses the existing worker; it adds no worker or recurring scheduler. The workspace-initiated round trip and remote worker independence are separate evidence. The full three-milestone goal remains active until PC-off completion is proved.
