@@ -5,27 +5,26 @@ review, not a penetration test or a general production-reliability ranking.
 GitHub stars/test-file counts do not establish security. No new platform,
 customer account or public endpoint was deployed during this review.
 
-## Recommendation
+## Current recommendation
 
-Qualify **LibreChat** as Scout's employee/customer conversation foundation.
-Retain the existing DSH/Odoo queue and port the useful Open Duet review/recovery
-contract; retain native Scout device actions behind their separate authorization
-boundary. Use one product and pinned upstream components, with small Scout
-adapters rather than maintaining several full chat forks. Existing Open Duet
-owner-pilot evidence remains valid for its tested scope.
+Use CopilotKit/OpenDuet at upstream pin
+[f52288fff5ccdbd3de428d573d9f026fce5ff480](https://github.com/CopilotKit/OpenDuet/tree/f52288fff5ccdbd3de428d573d9f026fce5ff480)
+as the mobile-first source foundation. This is the owner's latest direction and
+supersedes the LibreChat qualification below. Preserve the existing Odoo/DSH
+queue, OpenRouter limits, recovery receipts and device approval boundary.
 
-Source fork [Nepritariel08/scout-platform](https://github.com/Nepritariel08/scout-platform)
-now exists with its upstream MIT attribution retained. The selected release pin
-is available there; its default branch is not an approved production build.
-The existing Scout/Open Duet fork remains the contract/reference pilot during
-integration; no second public chat app has been activated.
+OpenDuet's Rich Threads and memory require CopilotKit Intelligence. Production
+must choose a licensed self-hosted Intelligence deployment or a first-party
+Scout Intelligence service with its own thread/event APIs and UI. The latter
+uses supported AG-UI/Runtime interfaces but is not a drop-in Intelligence
+backend. See [the pivot design](SCOUT-COPILOTKIT-INTELLIGENCE.md).
 
-The initial Open Duet selection addressed a personal workspace/queue pilot.
-Employee/customer access materially expands that requirement. Building a full
-multi-user/tenant system inside its single-owner server is a larger maintenance
-commitment than qualifying a foundation that already contains those controls.
+The live GitHub API reports scout-workspace as public, contrary to the earlier
+tracker statement that it is private. Keep business-specific changes local
+until the publishing target is confirmed private. No new service, employee or
+customer access, or mobile installation is claimed.
 
-## Compared repositories
+## Historical comparison (superseded)
 
 | Candidate | Relevant strengths | Material qualification or licensing boundary | Decision |
 | --- | --- | --- | --- |

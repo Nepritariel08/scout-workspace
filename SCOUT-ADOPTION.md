@@ -6,17 +6,27 @@ Engineering tracker: [SSC AI Enablement #4](https://github.com/Nepritariel08/ssc
 
 Source bootstrap: [Scout Workspace PR #1](https://github.com/Nepritariel08/scout-workspace/pull/1). The fork's existing Actions workflows are enabled; its PR checks provide the current fork-head status separately from the upstream evidence below.
 
-## Decision and scope
+## Current CopilotKit decision
 
-Scope expansion, 2026-11-01: the owner now requests an owned AI platform for
-employees and customers with permission-aware context, security layers and
-access rights. The [enterprise architecture](docs/SCOUT-ENTERPRISE-ARCHITECTURE.md)
-and [foundation review](docs/SCOUT-REPOSITORY-REVIEW.md) qualify LibreChat as a
-stronger shared-workspace candidate. The Open Duet decision below remains the
-accepted owner-pilot foundation; it is not a multi-user production approval.
-Preserve its tested task/review/recovery behavior and upstream attribution.
+The owner-directed foundation is CopilotKit/OpenDuet at upstream pin
+[f52288fff5ccdbd3de428d573d9f026fce5ff480](https://github.com/CopilotKit/OpenDuet/tree/f52288fff5ccdbd3de428d573d9f026fce5ff480),
+licensed MIT. This supersedes the earlier LibreChat and Anil-matcha/open-duet
+foundation choices. Keep the existing Scout queue, OpenRouter budget controls,
+DSH/Odoo receipts and MatePad approval flow as migration donors; remove old
+interfaces only after parity and recovery are accepted.
 
-Use Open Duet as the source foundation for an independently maintained Scout workspace. The owner authorized the GitHub fork and source bootstrap on 2026-11-01. The source includes a requester-only Scout execution adapter and conversation review controls. The private loopback workspace has passed live queue round-trip, human acceptance, bounded OpenRouter inference and client-crash recovery checks. Actual PC-off completion remains unverified.
+The owner-owned Intelligence decision is documented in
+[SCOUT-COPILOTKIT-INTELLIGENCE.md](docs/SCOUT-COPILOTKIT-INTELLIGENCE.md).
+OpenDuet requires CopilotKit Intelligence for Rich Threads. Scout must either
+use a licensed self-hosted deployment or own thread/event persistence, memory,
+identity and thread UI over supported AG-UI/Runtime interfaces. DSH remains the
+asynchronous queue worker; Odoo remains the only work-item ledger.
+
+The live GitHub API reports this repository as public, despite the earlier
+tracker stating private. Changes in this working branch remain local and
+unpushed until the publishing target is confirmed.
+
+## Historical source bootstrap (superseded)
 
 - Scout fork: https://github.com/Nepritariel08/scout-workspace
 - Upstream: https://github.com/Anil-matcha/open-duet
@@ -27,7 +37,7 @@ Use Open Duet as the source foundation for an independently maintained Scout wor
 - License: Apache-2.0. Preserve the upstream license, attribution, and applicable notices when adapting or distributing the code.
 - Owner: Codex, chat `01a19336-83fb-7ab0-9829-6fc1c290c93f`. This checkout is independent of the active DSH/Community queue source lane and the Community migration host owner.
 
-## Candidates compared
+## Historical candidate comparison (superseded)
 
 | Candidate | Source evidence | Fit for Scout |
 | --- | --- | --- |
@@ -37,7 +47,7 @@ Use Open Duet as the source foundation for an independently maintained Scout wor
 
 This comparison supports a preferred starting point, not a general claim of production reliability. Test-file counts, stars, and activity alone do not establish correctness.
 
-## Proposed Scout integration
+## Historical integration baseline (migration donor)
 
 See the [Linode, Scout App and MatePad deployment plan](docs/SCOUT-SERVER-PLAN.md)
 for the proposed central workspace, owner-device pilot, multi-user gaps and
@@ -67,7 +77,7 @@ Open Duet's native `openrouter` engine points at `https://openrouter.ai/api/v1`.
 
 Self-hosted state does not make OpenRouter inference local: authorized prompt context sent to that route reaches OpenRouter and its selected provider. Local inference remains a separate route. Existing ChatGPT connector authorizations do not transfer to this application.
 
-## Bootstrap validation receipt
+## Historical validation receipt (Anil foundation only)
 
 Upstream exact-main [CI run 41067147210](https://github.com/Anil-matcha/open-duet/actions/runs/41067147210) passed backend tests on PostgreSQL and SQLite, Linux sandbox enforcement, real-process backend smoke, server smoke, and desktop Node tests. Frontend, mobile and isolated Chromium jobs were skipped by that run's path filters; it does not establish fresh coverage for those jobs.
 
@@ -91,7 +101,7 @@ Windows failure details:
 
 The four failures remain visible. No test was weakened or marked passing. Desktop installation and Windows production use remain unqualified.
 
-## Adapter implementation
+## Existing migration donor: queue adapter
 
 The `scout_queue` engine now verifies the fixed requester MCP binding, persists
 an exact submission intent before the RPC, and follows the Odoo work-item ID

@@ -20,11 +20,13 @@ safeguards, caching, routing and monitoring. Its caption and initial visual
 explanation were inspected in the authenticated owner browser; no complete
 audio transcript was obtained. It guides the architecture, not authority.
 
-1. **One user-facing Scout workspace.** Qualify LibreChat as the employee and
-   customer conversation foundation. Its multi-user/auth/access capabilities
-   and MIT application license fit this expanded requirement better than the
-   current single-owner Open Duet install. This is a candidate recommendation,
-   subject to the pinned-source and runtime qualification below.
+1. **One user-facing Scout workspace.** Use CopilotKit/OpenDuet pinned at
+   `f52288fff5ccdbd3de428d573d9f026fce5ff480` as the mobile-first source.
+   OpenDuet depends on CopilotKit Intelligence for Rich Threads and memory.
+   Production needs either a licensed self-hosted Intelligence deployment or
+   Scout-owned persistence, memory APIs and thread UI; see
+   [the pivot design](SCOUT-COPILOTKIT-INTELLIGENCE.md). This supersedes the
+   earlier LibreChat/Open Duet foundation selection.
 2. **Keep the useful work already done.** Retain Open Duet's proven submission,
    review and crash-recovery contracts, the existing Odoo queue/DSH worker and
    Scout's native MatePad approval/execution boundary. Port capabilities behind
